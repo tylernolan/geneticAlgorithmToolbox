@@ -84,6 +84,6 @@ class ZeroOneKnapsackProblem(FractionalKnapsackProblem):
 				
 		
 if __name__ == "__main__":
-	#frkp = FractionalKnapsackProblem("test")
-	#print frkp.greedyEval()
-	zokp = ZeroOneKnapsackProblem("test")
+	frkp = FractionalKnapsackProblem("test")
+	print frkp.greedyEval()
+	#zokp = ZeroOneKnapsackProblem("test")

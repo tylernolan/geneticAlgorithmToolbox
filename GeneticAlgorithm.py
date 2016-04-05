@@ -26,26 +26,26 @@ class GeneticAlgorithm():
 		self.solutionFactory = solutionFactory
 		self.numGenerations = numGenerations
 		self.generationSize = generationSize
-		self.generations = defaultdict(list)
-		self.currGeneration = 0
+		#self.generations = defaultdict(list)
+		self.currGenerationIndex = 0
 		self.genMaxFound = 0
 		self.mutationChance = mutationChance
 		self.numParents = numParents
 		self.selectionThreshold = selectionThreshold
 		self.percentRandom = percentRandom
 		
-		self.generations[0] = self.sortGeneration(self.solutionFactory.initializeGeneration(self.generationSize))
-		self.currentMax = self.generations[0][-1]
+		self.currGeneration = self.sortGeneration(self.solutionFactory.initializeGeneration(self.generationSize))
+		self.currentMax = self.currGeneration[-1]
 		
-		for self.currGeneration in range(self.numGenerations):
-			self.nextGeneration(self.currGeneration)
+		for self.currGenerationIndex in range(self.numGenerations):
+			self.nextGeneration(self.currGenerationIndex)
 			if extraTerminationCondition != None and extraTerminationCondition(self.currentMax):
 				break
-
+	#DEPRECATED
 	def toCSV(self, filename):
 		file = open(filename, 'w')
 		for i in range(self.getLastGeneration()+1):
-			maxVal = self.getMaximumForGeneration(i)
+			maxVal = self.getMaximumForGeneration()
 			file.write("{}|{}\n".format(i, self.fitnessFunction(maxVal)))
 		file.close()
 		
@@ -55,36 +55,29 @@ class GeneticAlgorithm():
 	def getMax(self):
 		return self.currentMax
 	
-	def getMaximumForGeneration(self, generation):
-		return self.sortGeneration(self.generations[generation])[-1]
+	def getMaximumForGeneration(self):
+		return self.sortGeneration(self.currGeneration)[-1]
 		
 	def getLastGeneration(self):
-		return max(self.generations.keys())
+		return self.currGenerationIndex
 	
 	#Performs the base operations of the algorithm
 	def nextGeneration(self, i):
-		if (self.fitnessFunction(self.getMaximumForGeneration(i))) > (self.fitnessFunction(self.currentMax)):
+		if (self.fitnessFunction(self.getMaximumForGeneration())) > (self.fitnessFunction(self.currentMax)):
 			#print self.fitnessFunction(self.currentMax)
 			#print self.fitnessFunction(self.getMaximumForGeneration(self.currGeneration))
 			#print ""
 			self.genMaxFound = i
-			self.currentMax = self.getMaximumForGeneration(i).copy()
+			self.currentMax = self.getMaximumForGeneration().copy()
 		selectedSolutions = self.select()
 		self.mutate(selectedSolutions)
-		self.generations[i+1] = self.crossover(selectedSolutions)
+		self.currGeneration = self.crossover(selectedSolutions)
 		#self.generations[self.currGeneration+1].append(self.currentMax)
 	
 	#calls the mutate method on each individual solution
 	def mutate(self, selectedSolutions):
 		for solution in selectedSolutions:
 			solution.mutate(self.mutationChance)
-			
-	def logGeneration(self, generation, genNumber):
-		file = open("log.txt", 'a')
-		file.write("GENERATION NUMBER {}\n".format(genNumber))
-		file.write("GEN MAX = {}\n".format(self.fitnessFunction(generation[-1])))
-		for thing in generation:
-			file.write(str(self.fitnessFunction(thing))+"\n")
 	
 	#Fills the next generation with crossover, and new random solutions. 
 	def crossover(self, solutionsToCross):
@@ -99,11 +92,10 @@ class GeneticAlgorithm():
 		for i in range(self.generationSize - len(nextGeneration)):
 			nextGeneration.append(self.solutionFactory.generateRandomSolution())
 		nextGeneration = self.sortGeneration(nextGeneration)
-		self.logGeneration(nextGeneration, self.currGeneration)
 		return nextGeneration
 		
 	#sort the current generation with the fitness function, return the top threshold% of solutions.
 	def select(self):
 		#TODO: I could probably significantly cut down the number of copy operations here by only copying the genes I'm returning.
-		return [x.copy() for x in self.generations[self.currGeneration][int(-len(self.generations[self.currGeneration])*self.selectionThreshold):]]
+		return [x.copy() for x in self.currGeneration[int(-len(self.currGeneration)*self.selectionThreshold):]]
 		

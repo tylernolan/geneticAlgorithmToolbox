@@ -43,9 +43,10 @@ if __name__ == "__main__":
 	gasf = GeneticAlgorithmSolutionFactoryBuilder()
 	s = time.time()
 	ga = GeneticAlgorithm(gasf, FitnessFunctions.GAOptimizer, numGenerations=50, generationSize = 12)#, extraTerminationCondition = etc)
+	#ga = GeneticAlgorithm(sf, FitnessFunctions.fractionalKnapsack, numGenerations=50, generationSize=50)
 	print time.time() - s
 	print ga.getLastGeneration()
 	print ga.getMax()
-	#print FitnessFunctions.fractionalKnapsack(ga.getMax())
+	print FitnessFunctions.fractionalKnapsack(ga.getMax())
 	#print ga.genMaxFound
 	ga.toCSV("output.csv")
