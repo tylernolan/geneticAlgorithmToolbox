@@ -3,11 +3,11 @@ class TooHeavyException(Exception):
 		Exception.__init__(self,*args,**kwargs)
 		
 class Knapsack():
-	def __init__(self, capacity, items = [], current = 0, value = 0):
-		self.items = items
-		self.capacity = capacity
-		self.current = current
-		self.value = value
+	def __init__(self, capacity):
+		self.items = []
+		self.capacity = 0
+		self.current = 0
+		self.value = 0
 	def addItem(self, item):
 		if self.capacity >= self.current + item.weight:
 			self.items.append(item)
@@ -46,15 +46,13 @@ class Item():
 		return "{}, {}, {}".format(self.id, self.value, self.weight)
 		
 class FractionalKnapsackProblem():
-	def __init__(self, file, items = [], knapsack = []):
+	def __init__(self, file):
 		self.currMax = 0
-		self.items = items
-		self.knapsack = knapsack
-		if self.knapsack == []:
-			f = open(file).readlines()
-			self.knapsack = Knapsack(int(f[0]))
-			for line in f[1:]:
-				self.items.append(Item(line))
+		self.items = []
+		f = open(file).readlines()
+		self.knapsack = Knapsack(int(f[0]))
+		for line in f[1:]:
+			self.items.append(Item(line))
 			
 	def evaluate(self, solution):
 		for value in solution:
@@ -62,7 +60,8 @@ class FractionalKnapsackProblem():
 				self.knapsack.addItem(self.items[int(value)])
 			except TooHeavyException:
 				self.knapsack.addFractionalItem(self.items[int(value)])
-				return self.knapsack.value
+				val = self.knapsack.value
+				return val
 				
 	def greedyEval(self):
 		self.items.sort(key=lambda x: x.valuePerUnitWeight)

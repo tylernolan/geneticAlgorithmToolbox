@@ -64,9 +64,6 @@ class GeneticAlgorithm():
 	#Performs the base operations of the algorithm
 	def nextGeneration(self, i):
 		if (self.fitnessFunction(self.getMaximumForGeneration())) > (self.fitnessFunction(self.currentMax)):
-			#print self.fitnessFunction(self.currentMax)
-			#print self.fitnessFunction(self.getMaximumForGeneration(self.currGeneration))
-			#print ""
 			self.genMaxFound = i
 			self.currentMax = self.getMaximumForGeneration().copy()
 		selectedSolutions = self.select()

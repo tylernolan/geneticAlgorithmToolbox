@@ -5,7 +5,11 @@ from SolutionFactory import SolutionFactory
 from Gene import *
 from TSP import TravellingSalesman
 import operator
-
+from pympler import muppy
+from pympler import summary
+import types
+import gc
+import objgraph
 '''
 Structure for comparing genetic algorithm candidates, holds the maximum value found in the run, and the generation where that value was found.
 '''
@@ -38,12 +42,10 @@ Class that holds a variety of sample fitness functions.
 '''
 class FitnessFunctions():		
 	'''
-	Returns an optimized GA for the fractional knapsack problem. 
-	TODO: generalize this so it can be used for all problems, the codebase should be agile enough for it. 
+	Returns an optimized GA for a given problem
 	'''
 	@staticmethod
 	def GAOptimizer(solution):
-		
 		mutationChance = solution["mutationChance"].value
 		numParents = solution["numParents"].value
 		selectionThreshold = solution["selectionThreshold"].value
@@ -51,6 +53,7 @@ class FitnessFunctions():
 		filename = solution["file"].value
 		alg = solution["func"].value
 		sf = SolutionFactory()
+		
 		for i in range(50):
 			sf.addGene(str(i),0,1, geneType = Gene)
 		sf.addGene("file", filename, geneType = ConstGene)
@@ -58,7 +61,6 @@ class FitnessFunctions():
 		
 		genMaxFound = ga.genMaxFound
 		maximum = ga.getMax()
-		print "done"
 		return GA_Opt_Struct(maximum, genMaxFound, solution)
 		
 	'''
