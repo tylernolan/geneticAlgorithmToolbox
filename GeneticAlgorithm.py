@@ -41,13 +41,6 @@ class GeneticAlgorithm():
 			self.nextGeneration(self.currGenerationIndex)
 			if extraTerminationCondition != None and extraTerminationCondition(self.currentMax):
 				break
-	#DEPRECATED
-	def toCSV(self, filename):
-		file = open(filename, 'w')
-		for i in range(self.getLastGeneration()+1):
-			maxVal = self.getMaximumForGeneration()
-			file.write("{}|{}\n".format(i, self.fitnessFunction(maxVal)))
-		file.close()
 		
 	def sortGeneration(self, generation):
 		return sorted(generation, key=lambda x: self.fitnessFunction(x))

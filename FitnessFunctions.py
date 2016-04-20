@@ -57,7 +57,7 @@ class FitnessFunctions():
 		for i in range(50):
 			sf.addGene(str(i),0,1, geneType = Gene)
 		sf.addGene("file", filename, geneType = ConstGene)
-		ga = GeneticAlgorithm(sf, alg, numGenerations=15, generationSize = 15, mutationChance = mutationChance, numParents = numParents, selectionThreshold = selectionThreshold, percentRandom = percentRandom)#, extraTerminationCondition = etc)
+		ga = GeneticAlgorithm(sf, alg, numGenerations=20, generationSize = 30, mutationChance = mutationChance, numParents = numParents, selectionThreshold = selectionThreshold, percentRandom = percentRandom)#, extraTerminationCondition = etc)
 		
 		genMaxFound = ga.genMaxFound
 		maximum = ga.getMax()

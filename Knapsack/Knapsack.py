@@ -5,7 +5,7 @@ class TooHeavyException(Exception):
 class Knapsack():
 	def __init__(self, capacity):
 		self.items = []
-		self.capacity = 0
+		self.capacity = capacity
 		self.current = 0
 		self.value = 0
 	def addItem(self, item):
@@ -29,9 +29,7 @@ class Knapsack():
 	def hasSpace(self):
 		return self.current < self.capacity
 	def getSpace(self):
-		return self.capacity - self.current 
-	def copy(self):
-		return Knapsack(self.capacity, self.items, self.current, self.value)
+		return self.capacity - self.current
 		
 	
 class Item():
@@ -46,10 +44,10 @@ class Item():
 		return "{}, {}, {}".format(self.id, self.value, self.weight)
 		
 class FractionalKnapsackProblem():
-	def __init__(self, file):
+	def __init__(self, filename):
 		self.currMax = 0
 		self.items = []
-		f = open(file).readlines()
+		f = open(filename).readlines()
 		self.knapsack = Knapsack(int(f[0]))
 		for line in f[1:]:
 			self.items.append(Item(line))
